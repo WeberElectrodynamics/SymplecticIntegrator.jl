@@ -1,0 +1,4 @@
+name = "SymplecticIntegrator"
+uuid = "79105185-dc04-435d-8382-8832a8b418f9"
+authors = ["Samer <samerweb3@gmail.com>"]
+version = "0.1.0"
