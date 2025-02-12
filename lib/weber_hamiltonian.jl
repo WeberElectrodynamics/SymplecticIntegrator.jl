@@ -4,6 +4,7 @@ module WeberHamiltonian
 using Symbolics: @variables, Differential, expand_derivatives, build_function
 using Base.Iterators: partition
 using LinearAlgebra: norm
+using NaNMath
 
 function kinetic_energy(ps, d)
 	KE = 0
@@ -111,8 +112,6 @@ function generate_and_save_weber_vector_fields(d, charges, N, c)
 	save_function_expressions(pdot_exprs, "weber_vector_fields/pdot_exprs.txt")
 end
 
-export generate_and_save_weber_vector_fields
-
 function load_function_expressions(filename::String)
 	exprs = Expr[]
 	file_content = read(filename, String)
@@ -136,17 +135,4 @@ function load_weber_vector_fields()
 	return qdot_funcs, pdot_funcs
 end
 
-
-
-export load_weber_vector_fields
-
 end
-
-d = 2
-charges = [1, -1, 1, -1]
-N = 4
-c = 10
-
-WeberHamiltonian.generate_and_save_weber_vector_fields(d, charges, N, c)
-
-qdots, pdots = WeberHamiltonian.load_weber_vector_fields()
