@@ -5,13 +5,13 @@ using StatsBase
 include("lib/weber_hamiltonian.jl")
 
 d = 2
-charges = [1, -1, 1, -1, 1, -1, 1, -1]
-N = 8
+charges = [1, -1, 1, -1]
+N = 4
 c = 10
 
 params = (d, charges, N, c)
 
-WeberHamiltonian.generate_and_save_weber_vector_fields(d, charges, N, c)
+# WeberHamiltonian.generate_and_save_weber_vector_fields(d, charges, N, c)
 
 qdot_funcs, pdot_funcs = WeberHamiltonian.load_weber_vector_fields()
 H = WeberHamiltonian.weber_hamiltonian

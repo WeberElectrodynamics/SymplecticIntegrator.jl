@@ -1,5 +1,6 @@
 position(ϕ) = [cos(ϕ), sin(ϕ)]
-velocity(ϕ) = [-sin(ϕ), cos(ϕ)]
+λ = √(0.707)
+velocity(ϕ) = [-λ * sin(ϕ), λ * cos(ϕ)]
 
 function integrate(start, stop, step)
 	phases = range(0, 2π, length = N + 1)
@@ -8,22 +9,14 @@ function integrate(start, stop, step)
 	particle2qs = position(phases[2])
 	particle3qs = position(phases[3])
 	particle4qs = position(phases[4])
-	particle5qs = position(phases[5])
-	particle6qs = position(phases[6])
-	particle7qs = position(phases[7])
-	particle8qs = position(phases[8])
 
 	particle1ps = velocity(phases[1])
 	particle2ps = velocity(phases[2])
 	particle3ps = velocity(phases[3])
 	particle4ps = velocity(phases[4])
-	particle5ps = velocity(phases[5])
-	particle6ps = velocity(phases[6])
-	particle7ps = velocity(phases[7])
-	particle8ps = velocity(phases[8])
 
-	q0 = [particle1qs..., particle2qs..., particle3qs..., particle4qs..., particle5qs..., particle6qs..., particle7qs..., particle8qs...]
-	p0 = [particle1ps..., particle2ps..., particle3ps..., particle4ps..., particle5ps..., particle6ps..., particle7ps..., particle8ps...]
+	q0 = [particle1qs..., particle2qs..., particle3qs..., particle4qs...]
+	p0 = [particle1ps..., particle2ps..., particle3ps..., particle4ps...]
 
 	tspan = (start, stop)
 	tstep = step
@@ -31,13 +24,13 @@ function integrate(start, stop, step)
 	problem = GeometricIntegrators.HODEProblem(v!, f!, H, tspan, tstep, q0, p0)
 
 	# integrator = GeometricIntegrator(problem, QinZhang())
-	# integrator = GeometricIntegrator(problem, ImplicitMidpoint())
+	integrator = GeometricIntegrator(problem, ImplicitMidpoint())
 	# integrator = GeometricIntegrator(problem, SRK3())
 	# integrator = GeometricIntegrator(problem, Gauss(4))
 	# integrator = GeometricIntegrator(problem, LobattoIIID(2))
 	# integrator = GeometricIntegrator(problem, LobattoIIIE(2))
 	# integrator = GeometricIntegrator(problem, LobattoIIIG(2))
-	integrator = GeometricIntegrator(problem, SymplecticEulerA())
+	# integrator = GeometricIntegrator(problem, SymplecticEulerA())
 	# integrator = GeometricIntegrator(problem, SymplecticEulerB())
 	# integrator = GeometricIntegrator(problem, PartitionedGauss(1))
 
@@ -69,8 +62,8 @@ function _plot(t, qs, ps)
 	end
 
 	total_energy = collect([H(0, q, p, params) for (q, p) in zip(qs, ps)])
-	# println(describe(total_energy))
-	println("\n\nVariance: ", var(total_energy), "\n\n")
+	println(describe(total_energy))
+	# println("\n\nVariance: ", var(total_energy), "\n\n")
 
 
 	KE = [WeberHamiltonian.kinetic_energy(p, d) for p in ps]
@@ -94,5 +87,5 @@ function _plot(t, qs, ps)
 	display(p)
 end
 
-@time t, qs, ps = integrate(0.0, 10, 0.001)
+@time t, qs, ps = integrate(0.0, 100, 0.001)
 @time _plot(t, qs, ps)
